@@ -8,6 +8,11 @@
  * @property {string} name
  */
 
+ class Item {
+   constructor(name){
+     this.name = name;
+   }
+ }
 
 /**
  * Class => Weapon(name, damage)
@@ -25,13 +30,17 @@
  * @property {number} damage
  */
 
-
 /**
  * Weapon Extends Item Class
  * -----------------------------
  */
 
-
+class Weapon extends Item{
+  constructor(name, damage){
+    super(name);
+    this.damage = damage;
+  }
+}
 
 /**
  * Class => Food(name, energy)
@@ -55,7 +64,12 @@
  * -----------------------------
  */
 
-
+class Food extends Item {
+  constructor(name, energy){
+    super(name);
+    this.energy = energy;
+  }
+}
 
 /**
  * Class => Player(name, health, strength, speed)
@@ -78,6 +92,53 @@
  * @property {method} getPack              Returns private variable `pack`.
  * @property {method} getMaxHealth         Returns private variable `maxHealth`.
  */
+
+class Player{
+  
+  constructor(name, health, strength, speed){
+    this._pack = [];
+    this._maxHealth = health;
+    this.name = name;
+    this.health = health;
+    this.strength = strength;
+    this.speed = speed;
+    this.isAlive = true;
+    this.equipped = false;
+  };
+
+  getPack(){
+    return this._pack;
+  }
+
+  getMaxHealth(){
+    return this._maxHealth;
+  }
+
+  checkPack(){
+    console.log(this._pack.join(" "));
+  }
+
+  takeItem(item){
+    if(this._pack.length < 3){
+      this._pack.push(item);
+      console.log(Player.name + " picked up " + item.name + ".");
+    }
+    console.log(Player.name + " could not pick up " + item.name +".");
+    return false;
+  }
+
+  discardItem(item){
+    if(this._pack.indexOf(item) > -1){
+      let tempIndex = this._pack.indexOf(item);
+      this._pack.splice(tempIndex,1);
+      console.log(item.name + " was discarded.");
+      return true;
+    }
+    console.log("Pack does not contain " + item.name + ". Nothing was discarded");
+    return false;
+  }
+
+
 
 
 /**
@@ -159,7 +220,20 @@
  * @param {Weapon} itemToEquip  The weapon item to equip.
  */
 
+  equip(itemToEquip){
+    if(this._pack.indexOf(itemToEquip) > -1 && itemToEquip instanceof Weapon){
+      let tempIndex = this._pack.indexOf(itemToEquip);
+      
+      if(this.equipped){
+        this._pack.splice(tempIndex,1,this.equipped);
+      }else{
+        this._pack.splice(tempIndex, 1);
+      }
 
+      this.equipped = itemToEquip;
+    }
+  }
+  
 /**
  * Player Class Method => eat(itemToEat)
  * -----------------------------
@@ -208,7 +282,7 @@
  * @return {string/boolean}   Weapon name or false if nothing is equipped.
  */
 
-
+}
 /**
  * Class => Zombie(health, strength, speed)
  * -----------------------------
